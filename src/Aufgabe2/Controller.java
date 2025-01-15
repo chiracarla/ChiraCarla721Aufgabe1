@@ -1,7 +1,6 @@
 package Aufgabe2;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class Controller {
         return prodRepo.read(id);
     }
 
-    public Charaktere readClient(int id) {
+    public Charaktere updateChar(int id) {
         return charRepo.read(id);
     }
 
@@ -46,7 +45,7 @@ public class Controller {
         prodRepo.update(product);
     }
 
-    public void updateClient(Charaktere client) {
+    public void updateChar(Charaktere client) {
         charRepo.update(client);
     }
 
@@ -54,7 +53,7 @@ public class Controller {
         prodRepo.delete(id);
     }
 
-    public void deleteClient(int id) {
+    public void deleteChar(int id) {
         charRepo.delete(id);
     }
 
@@ -76,6 +75,19 @@ public class Controller {
             }
         }
         return result;
+    }
+
+    public List<Produkte> sortCharProds(int id, String order) {
+        sortProducts(charRepo.read(id).getProdukte(), order == "ascending");
+        return charRepo.read(id).getProdukte();
+    }
+
+    public static void sortProducts(List<Produkte> products, boolean ascending) {
+        if (ascending) {
+            products.sort(Comparator.comparingDouble(Produkte::getPreis));
+        } else {
+            products.sort((p1, p2) -> Double.compare(p2.getPreis(), p1.getPreis()));
+        }
     }
 
 }
