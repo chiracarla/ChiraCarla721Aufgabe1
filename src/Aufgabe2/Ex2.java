@@ -9,17 +9,17 @@ public class Ex2 {
         Repository<Produkte> productRepository = new Repository<Produkte>();
         Repository<Charaktere> clientRepository = new Repository<Charaktere>();
         Controller controller = new Controller(productRepository, clientRepository);
-//        controller.createProduct(700.00, "Snowboard", "Winter");
-//        controller.createProduct(200.00, "Rollerskates", "Spring");
-//        controller.createProduct(59.00, "Swimsuit", "Summer");
+        controller.createProduct(700.00, "Snowboard", "Winter");
+        controller.createProduct(200.00, "Rollerskates", "Spring");
+        controller.createProduct(59.00, "Swimsuit", "Summer");
         List<Integer> prods = new ArrayList<>();
         prods.add(1);
         prods.add(2);
-//        controller.createClient("Bob", "Bucharest", prods);
-//        System.out.println(controller.findByLocation("Bucharest"));
-//        System.out.println(controller.findByProdSeason(Seasons.Winter));
-//        System.out.println(controller.sortClientProds(1, "ascending"));
-//        System.out.println(controller.sortClientProds(1, "descending"));
+        controller.createChar("Bob", "Bucharest", prods);
+        System.out.println(controller.filterByHerkunft("Bucharest"));
+        System.out.println(controller.filterByProd(1));
+        System.out.println(controller.sortCharProds(1, "ascending"));
+        System.out.println(controller.sortCharProds(1, "descending"));
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
