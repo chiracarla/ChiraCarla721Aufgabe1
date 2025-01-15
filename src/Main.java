@@ -3,17 +3,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+//public class Events{}
 
 public class Main {
     public static void main(String[] args) {
         read();
         startingWith("C");
+        sortByDate();
     }
     static public void read(){
         String filePath = "src/evenimente.tsv";
@@ -54,6 +56,39 @@ public class Main {
                 .collect(Collectors.toList());
         for(String name : names){
             System.out.println(name);
+        }
+    }
+
+    static public void sortByDate(){
+        Map<String, LocalDate> eventDate = new HashMap<>();
+        String filePath = "src/evenimente.tsv";
+        List<String> names= new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            for(String line : lines){
+                String[] fields = line.split("\t");
+                if(fields[2].equals("Stark")){
+                    eventDate.put(fields[3], LocalDate.parse(fields[4]));
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HashMap<String, LocalDate> temp
+                = eventDate.entrySet()
+                .stream()
+                .sorted((i1, i2)
+                        -> i1.getValue().compareTo(
+                        i2.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+
+        for (Map.Entry<String, LocalDate> en :
+                temp.entrySet()) {
+            System.out.println(en.getKey());
         }
     }
 }
