@@ -16,6 +16,7 @@ public class Main {
         read();
         startingWith("C");
         sortByDate();
+        sortHousePoints();
     }
     static public void read(){
         String filePath = "src/evenimente.tsv";
@@ -38,6 +39,7 @@ public class Main {
 
     static public void startingWith(String letter){
         String filePath = "src/evenimente.tsv";
+
         List<String> names= new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath));
@@ -89,6 +91,46 @@ public class Main {
         for (Map.Entry<String, LocalDate> en :
                 temp.entrySet()) {
             System.out.println(en.getKey());
+        }
+    }
+
+    static public void sortHousePoints(){
+        Map<String, Integer> housePoints = new HashMap<>();
+        String filePath = "src/evenimente.tsv";
+        String wFilePath = "src/ergebnis.txt";
+        List<String> names= new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            for(String line : lines){
+                String[] fields = line.split("\t");
+                housePoints.put(fields[2], housePoints.getOrDefault(fields[2], 0) + 1);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HashMap<String, Integer> temp
+                = housePoints.entrySet()
+                .stream()
+                .sorted((i1, i2)
+                        -> i1.getKey().compareTo(
+                        i2.getKey())).sorted((i2, i1)
+                        -> i1.getValue().compareTo(
+                        i2.getValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+
+        List<String> lines = new ArrayList<>();
+        for (Map.Entry<String, Integer> en :
+                temp.entrySet()) {
+            lines.add(en.getKey() + "#"+ en.getValue());
+        }
+        try {
+            Files.write(Paths.get(wFilePath), lines);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
